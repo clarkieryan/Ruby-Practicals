@@ -19,14 +19,20 @@
 #
 # Call a block n times
 def n_times(n)
-  # INSERT CODE HERE: One line of code is all that's needed
+  n.times do yield() end
 end
 
 # == Exercise 1b: Repeat
 # Write an iterator class Repeat that is instantiated with a number and has a method each
 # that takes a block as an argument and calls it as often as declared when creating the object
 class Repeat
-  # INSERT CODE HERE
+  def initialize(n)
+    @n = n
+  end
+
+  def each(&block)
+    @n.times do block.call end
+  end
 end
 
 
@@ -39,6 +45,8 @@ end
 # Hint: A range is written like this:
 #  (1..3)   # == 1,2,3
 #  (1...3)  # == 1,2
+# SOLUTION
+# (1..20).inject { |sum, n| sum + n }
 # === Function
 # Fill in this function stub. Consider using an iterator we saw earlier, i.e. one
 # that accumulates the result
@@ -48,6 +56,11 @@ end
 # Calculate n!
 def fac(n)
   # INSERT CODE HERE
+  if(n < 1)
+    return 0
+  else
+    return (1..n).inject { |sum, n| sum * n }
+  end
   # Deal with the < 1 condition first (one line of code)
   # Then deal with the normal case using an iterator (again one line of code)
 end
@@ -63,6 +76,7 @@ end
 # Find longest string in strings
 def longest_string(strings)
   # INSERT CODE HERE, just one or two lines
+  return strings.max_by{|a| a.length}
 end
 
 # == Exercise 4: find_it
@@ -80,6 +94,9 @@ end
 #  should return the longest string.
 def find_it(strings)
   best_so_far = strings[0]
+  strings.each do | this |
+    best_so_far = this if (yield(best_so_far, this))
+  end
   # Go through the list and call the block repeatedly (yield), using the result to update best_so_far
   # Feel free to change the partial solution if you wish. Note also that there are several ways
   # this can be solved.
